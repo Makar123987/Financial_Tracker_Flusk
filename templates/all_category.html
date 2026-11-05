@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Categories{% endblock %}
+{% block content %}
+<p class="eyebrow">Your organization</p><h1>Categories</h1><p class="subtitle">Organize your transactions in a way that makes sense to you.</p>
+<section class="card"><div class="card-header"><div><h2>Create a category</h2><p class="muted">Add a new group for your transactions.</p></div></div>
+  <form action="/category" method="post" class="filter"><div class="field"><label for="category_name">Category name</label><input type="text" id="category_name" name="category_name" placeholder="e.g. Groceries"></div><button type="submit">Add category</button></form>
+</section>
+<div class="grid">
+  <section class="card"><div class="card-header"><div><h2>System categories</h2><p class="muted">Ready-made categories to get you started.</p></div></div>
+    {% for system_category in system_categories %}<div class="category-row"><a class="category-name" href="/category/{{ system_category.id }}">{{ system_category.name }}</a><span class="badge">System</span></div>{% else %}<p class="empty">No system categories yet.</p>{% endfor %}
+  </section>
+  <section class="card"><div class="card-header"><div><h2>Your categories</h2><p class="muted">Categories you've created.</p></div></div>
+    {% for user_category in user_categories %}<div class="category-row"><a class="category-name" href="/category/{{ user_category.id }}">{{ user_category.name }}</a>{% if user_category.owner != 1 %}<a class="delete-link" href="/category/{{ user_category.id }}/delete">Delete</a>{% endif %}</div>{% else %}<p class="empty">You haven't created any categories yet.</p>{% endfor %}
+  </section>
+</div>
+{% endblock %}

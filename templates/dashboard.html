@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Transactions{% endblock %}
+{% block head %}{% if view_mode == 'all' %}<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>{% endif %}{% endblock %}
+{% block content %}
+<p class="eyebrow">Your finances at a glance</p>
+<h1>{% if view_mode == 'income' %}Income{% elif view_mode == 'spend' %}Spending{% else %}Transactions{% endif %}</h1>
+<p class="subtitle">Keep track of your activity and see where your money goes.</p>
+<section class="card">
+  <div class="card-header"><div><h2>Transaction history</h2><p class="muted">Your financial activity, all in one place.</p></div><div class="actions"><a class="button secondary" href="/income">+ Income</a><a class="button" href="/spend">+ Spend</a></div></div>
+  <form action="/transactions" method="get" class="filter" style="margin-bottom:22px">
+    <div class="field"><label for="start_date">From</label><input type="date" name="start_date" id="start_date" value="{{ request.args.get('start_date', '') }}" required></div>
+    <div class="field"><label for="end_date">To</label><input type="date" name="end_date" id="end_date" value="{{ request.args.get('end_date', '') }}" required></div>
+    <button type="submit">Filter</button>
+  </form>
+  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Description</th><th>Category</th><th>Amount</th><th>Date / Time</th><th>Type</th><th>Action</th></tr></thead><tbody>
+    {% for transaction in transactions %}<tr><td>#{{ transaction.id }}</td><td>{{ transaction.description }}</td><td>{{ category_names.get(transaction.category) or 'Unknown category' }}</td><td>{{ transaction.amount }}</td><td>{{ transaction.date }}</td><td><span class="badge {% if transaction.type != 1 %}spend{% endif %}">{% if transaction.type == 1 %}Income{% else %}Spend{% endif %}</span></td><td><a href="/transactions/{{ transaction.id }}">Edit</a><a class="delete-link" href="/transactions/{{ transaction.id }}/delete">Delete</a></td></tr>{% else %}<tr><td colspan="7" class="empty">No transactions to show yet.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+{% if view_mode in ['income', 'spend'] %}
+<section class="card form-card"><div class="card-header"><div><h2>Add {% if view_mode == 'income' %}income{% else %}a spend{% endif %}</h2><p class="muted">Enter the details of your transaction.</p></div></div>
+  <form action="{{ url_for('get_all_income' if view_mode == 'income' else 'get_all_spend') }}" method="post">
+    <div class="field"><label for="description">Description</label><input type="text" id="description" name="description"></div>
+    <div class="field"><label for="category">Category</label><select id="category" name="category" required><option value="">Choose a category</option>{% for category in categories %}<option value="{{ category.id }}">{{ category.name }}</option>{% endfor %}</select>{% if not categories %}<p class="muted">No categories available. <a href="/category">Create a category</a> first.</p>{% endif %}</div>
+    <div class="form-grid"><div class="field"><label for="amount">Amount</label><input type="text" id="amount" name="amount" inputmode="decimal"></div><div class="field"><label for="date">Date</label><input type="date" id="date" name="date" value="{{ date.strftime('%Y-%m-%d') }}"></div></div>
+    <button type="submit">Add transaction</button>
+  </form>
+</section>
+{% endif %}
+{% if view_mode == 'all' %}
+<div class="grid">
+  <section class="card"><div class="card-header"><div><h2>Income vs. spending</h2><p class="muted">A comparison of your totals.</p></div></div><div class="chart-box"><canvas id="myChart1"></canvas></div></section>
+  <section class="card"><div class="card-header"><div><h2>Transaction breakdown</h2><p class="muted">A closer look at individual activity.</p></div></div><div class="chart-box"><canvas id="myChart2"></canvas></div></section>
+</div>
+{% endif %}
+<section class="card balance-card"><div><h2>Current balance</h2><p class="muted">Total income minus total spending across all your transactions.</p></div><strong class="balance {% if balance < 0 %}negative{% elif balance > 0 %}positive{% endif %}">{{ '%.2f'|format(balance) }}</strong></section>
+{% endblock %}
+{% block scripts %}
+{% if view_mode == 'all' %}
+<script>
+if (typeof Chart !== 'undefined') {
+  const chartOptions = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#edf1f7' } }, x: { grid: { display: false } } } };
+  new Chart(document.getElementById('myChart1'), { type: 'bar', data: { labels: ['Income', 'Spend'], datasets: [{ label: 'Total', data: [{{ aggregated_data.income|tojson }}, {{ aggregated_data.spend|tojson }}], backgroundColor: ['#2459cc', '#d94d5e'], borderRadius: 6 }] }, options: chartOptions });
+  new Chart(document.getElementById('myChart2'), { type: 'bar', data: { labels: [{% for transaction in transactions %}{{ ('Income' if transaction.type == 1 else 'Spend')|tojson }},{% endfor %}], datasets: [{ label: 'Amount', data: [{% for transaction in transactions %}{{ transaction.amount|tojson }},{% endfor %}], backgroundColor: [{% for transaction in transactions %}{{ ('#2459cc' if transaction.type == 1 else '#d94d5e')|tojson }},{% endfor %}], borderRadius: 6 }] }, options: chartOptions });
+}
+</script>
+{% endif %}
+{% endblock %}

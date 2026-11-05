@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }}{% endblock %}
+{% block content %}
+<a class="back" href="/category">&larr; All categories</a>
+<p class="eyebrow">Category details</p><h1>{{ category.name }}</h1><p class="subtitle">View the transactions in this category.</p>
+<section class="card form-card">
+  {% if category.owner != 1 %}
+  <h2>Edit category</h2><p class="muted">Update the name of this category.</p>
+  <form action="/category/{{ category.id }}" method="post"><div class="field"><label for="category_name">Category name</label><input type="text" id="category_name" name="category_name" value="{{ category.name }}"></div><button type="submit">Save changes</button></form>
+  <form action="/category/{{ category.id }}/delete" method="post" style="margin-top:12px"><input class="danger" type="submit" value="Delete category"></form>
+  {% else %}<h2>System category</h2><p class="muted" style="margin-bottom:0">{{ category.name }}</p>{% endif %}
+</section>
+<section class="card"><div class="card-header"><div><h2>Transactions</h2><p class="muted">Activity in this category.</p></div></div>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Description</th><th>Category</th><th>Amount</th><th>Date / Time</th><th>Type</th></tr></thead><tbody>
+{% for transaction in transactions %}<tr><td>#{{ transaction.id }}</td><td>{{ transaction.description }}</td><td>{{ category.name or 'Unknown category' }}</td><td>{{ transaction.amount }}</td><td>{{ transaction.date }}</td><td><span class="badge {% if transaction.type != 1 %}spend{% endif %}">{% if transaction.type == 1 %}Income{% else %}Spend{% endif %}</span></td></tr>{% else %}<tr><td colspan="6" class="empty">No transactions in this category yet.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

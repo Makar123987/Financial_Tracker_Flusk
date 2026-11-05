@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Transaction {{ transaction.id }}{% endblock %}
+{% block content %}
+<a class="back" href="/transactions">&larr; All transactions</a>
+<p class="eyebrow">Transaction details</p><h1>Edit transaction</h1><p class="subtitle">Update the details for transaction #{{ transaction.id }}.</p>
+<section class="card form-card">
+  <form action="/transactions/{{ transaction.id }}" method="post">
+    <div class="field"><label for="transaction_description">Description</label><input type="text" id="transaction_description" name="transaction_description" value="{{ transaction.description }}"></div>
+    <div class="field"><label for="transaction_category">Category</label><select id="transaction_category" name="transaction_category" required><option value="">Choose a category</option>{% for category in categories %}<option value="{{ category.id }}" {% if category.id == transaction.category %}selected{% endif %}>{{ category.name }}</option>{% endfor %}</select>{% if not categories %}<p class="muted">No categories available. <a href="/category">Create a category</a> first.</p>{% endif %}</div>
+    <div class="form-grid"><div class="field"><label for="transaction_amount">Amount</label><input type="text" id="transaction_amount" name="transaction_amount" value="{{ transaction.amount }}"></div><div class="field"><label for="transaction_date">Date</label><input type="date" id="transaction_date" name="transaction_date" value="{{ transaction.date }}"></div></div>
+    <div class="field"><label for="transaction_type">Type</label><input type="text" id="transaction_type" name="transaction_type" value="{{ transaction.type }}"></div>
+    <button type="submit">Save changes</button>
+  </form>
+  <form action="/transactions/{{ transaction.id }}/delete" method="post" style="margin-top:12px"><input class="danger" type="submit" value="Delete transaction"></form>
+</section>
+{% endblock %}

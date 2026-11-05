@@ -1,0 +1,14 @@
+# Виртуальные окружения
+.venv/
+venv/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+
+# Настройки PyCharm
+.idea/
+
+# Локальная база и секреты
+financial_tracker.db
+.env

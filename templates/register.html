@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<p class="eyebrow">Get started</p><h1>Create your account</h1><p class="subtitle">Take the first step toward a clearer view of your finances.</p>
+<section class="card form-card">
+  <form action="/register" method="post">
+    <div class="form-grid">
+      <div class="field"><label for="username">Username</label><input type="text" id="username" name="username" autocomplete="given-name"></div>
+      <div class="field"><label for="surname">Surname</label><input type="text" id="surname" name="surname" autocomplete="family-name"></div>
+    </div>
+    <div class="field"><label for="email">Email</label><input type="email" id="email" name="email" autocomplete="email"></div>
+    <div class="field"><label for="password">Password</label><input type="password" id="password" name="password" autocomplete="new-password"></div>
+    <button type="submit">Create account &rarr;</button>
+  </form>
+  <p class="muted" style="margin:22px 0 0">Already have an account? <a href="/login">Log in</a></p>
+</section>
+{% endblock %}

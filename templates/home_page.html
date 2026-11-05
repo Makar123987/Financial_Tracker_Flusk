@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">A clearer view of your money</p>
+  <h1>Make every move count.</h1>
+  <p>Keep your income, spending, and categories together in one simple place. Get a better picture of where your money goes.</p>
+  <div class="actions"><a class="button" href="/register">Get started &rarr;</a><a class="button secondary" href="/login">Log in</a></div>
+</section>
+<div class="grid feature-grid">
+  <section class="card"><div class="feature-icon">↗</div><h2>See the full picture</h2><p>Track your income and spending in a single, organized dashboard.</p></section>
+  <section class="card"><div class="feature-icon red">▦</div><h2>Stay organized</h2><p>Group transactions into categories and find the details you need.</p></section>
+</div>
+{% endblock %}
