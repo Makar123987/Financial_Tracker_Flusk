@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Log in{% endblock %}
+{% block head %}
+<style>
+  .registration-notice { max-width:560px; padding:20px 24px; margin-bottom:24px; border:1px solid #a9d9bd; border-left:4px solid #087342; border-radius:12px; background:#eefaf3; color:#145735; }
+  .registration-notice strong { display:block; font-size:18px; margin-bottom:5px; }
+  .registration-notice p { margin:0; font-size:16px; }
+</style>
+{% endblock %}
 {% block content %}
 <p class="eyebrow">Welcome back</p><h1>Log in to your account</h1><p class="subtitle">Pick up where you left off and see your finances clearly.</p>
+{% for message in get_flashed_messages(category_filter=['registration_success']) %}
+<div class="registration-notice" role="status">
+  <strong>Registration successful</strong>
+  <p>{{ message }}</p>
+</div>
+{% endfor %}
 <section class="card form-card">
   <form action="/login" method="post">
     <div class="field"><label for="email">Email</label><input type="email" id="email" name="email" autocomplete="email"></div>

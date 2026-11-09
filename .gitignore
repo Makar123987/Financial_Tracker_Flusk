@@ -1,14 +1,14 @@
-# Виртуальные окружения
+# Virtual Environment
 .venv/
 venv/
 
-# Кэш Python
+# Cache Python
 __pycache__/
 *.py[cod]
 
-# Настройки PyCharm
+# Settings PyCharm
 .idea/
 
-# Локальная база и секреты
+# Local Database
 financial_tracker.db
 .env

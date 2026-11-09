@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ error_title | default('Something went wrong') }}{% endblock %}
+{% block head %}
+<style>
+  .error-card { max-width:680px; margin:24px auto; border-top:4px solid var(--red); padding:clamp(24px,5vw,44px); }
+  .error-symbol { display:grid; place-items:center; width:60px; height:60px; margin-bottom:24px; border-radius:16px; color:#b42335; background:#fff0f2; font-size:32px; font-weight:800; }
+  .error-card h1 { font-size:clamp(28px,4vw,38px); }
+  .error-message { margin:18px 0 28px; color:var(--muted); font-size:18px; line-height:1.65; overflow-wrap:anywhere; }
+</style>
+{% endblock %}
+{% block content %}
+<section class="card error-card" aria-labelledby="error-title">
+  <div class="error-symbol" aria-hidden="true">!</div>
+  <p class="eyebrow">{% if error_code %}Error {{ error_code }}{% else %}Please try again{% endif %}</p>
+  <h1 id="error-title">{{ error_title | default('Something went wrong') }}</h1>
+  <p class="error-message" role="alert">{{ error_data | default('We could not complete your request. Please try again.') }}</p>
+  <div class="actions">
+    <a class="button" href="{{ return_url | default('/') }}">{{ return_label | default('Back to home') }}</a>
+    {% if return_url | default('/') != '/' %}<a class="button secondary" href="/">Home</a>{% endif %}
+    {% if return_url | default('/') == '/register' %}<a class="button secondary" href="/login">Log in</a>{% endif %}
+  </div>
+</section>
+{% endblock %}
