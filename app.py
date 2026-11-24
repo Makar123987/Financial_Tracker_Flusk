@@ -92,10 +92,10 @@ def get_category(category_id):
         current_category = db_session.execute(select(models.Catgeory).filter_by(id=category_id)).scalars().first()
         if request.method == 'GET':
             transactions = list(db_session.execute(select(models.Transaction).filter_by(category=category_id,owner=session["user_id"])).scalars())
-            return render_template('one_category.html', category=current_category, transactions=transactions)
+            return render_template('one_category.html', category=current_category, transactions=transactions, user=session["user_id"])
         else:
             category_name = request.form["category_name"]
-            if current_category.owner != 1:
+            if current_category.owner == session["user_id"]:
                 current_category.name = category_name
                 db_session.commit()
             return redirect(f'/category/{category_id}')
