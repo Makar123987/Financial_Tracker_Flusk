@@ -4,7 +4,7 @@
 <a class="back" href="/category">&larr; All categories</a>
 <p class="eyebrow">Category details</p><h1>{{ category.name }}</h1><p class="subtitle">View the transactions in this category.</p>
 <section class="card form-card">
-  {% if category.owner != 1 %}
+  {% if category.owner == user%}
   <h2>Edit category</h2><p class="muted">Update the name of this category.</p>
   <form action="/category/{{ category.id }}" method="post"><div class="field"><label for="category_name">Category name</label><input type="text" id="category_name" name="category_name" value="{{ category.name }}"></div><button type="submit">Save changes</button></form>
   <form action="/category/{{ category.id }}/delete" method="post" style="margin-top:12px"><input class="danger" type="submit" value="Delete category"></form>

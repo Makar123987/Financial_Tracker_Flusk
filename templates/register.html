@@ -8,8 +8,8 @@
       <div class="field"><label for="username">Username</label><input type="text" id="username" name="username" autocomplete="given-name"></div>
       <div class="field"><label for="surname">Surname</label><input type="text" id="surname" name="surname" autocomplete="family-name"></div>
     </div>
-    <div class="field"><label for="email">Email</label><input type="email" id="email" name="email" autocomplete="email"></div>
-    <div class="field"><label for="password">Password</label><input type="password" id="password" name="password" autocomplete="new-password"></div>
+    <div class="field"><label for="email">Email (required)</label><input type="email" id="email" name="email" autocomplete="username" spellcheck="false" enterkeyhint="next" required></div>
+    <div class="field"><label for="password">Password (required)</label><input type="password" id="password" name="password" autocomplete="new-password" enterkeyhint="done" required></div>
     <button type="submit">Create account &rarr;</button>
   </form>
   <p class="muted" style="margin:22px 0 0">Already have an account? <a href="/login">Log in</a></p>
